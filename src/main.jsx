@@ -1,0 +1,31 @@
+import React, {useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import './styles.css';
+import {catalog} from './catalog';
+const isProducts = window.location.pathname.replace(/\/$/, '') === '/products.html';
+console.log('Catalog:', catalog);
+
+// Add your photos to public/images, then replace the empty strings below.
+const images = {hero: '', pumps: '', automation: '', treatment: ''};
+function Photo({name, label, src = images[name]}) {
+  const [failed, setFailed] = useState(false);
+  return src && !failed ? <img className="photo" src={src} alt={label} onError={() => setFailed(true)}/> : <div className="placeholder" role="img" aria-label={`${label} image placeholder`}><span className="photo-symbol" aria-hidden="true">▧</span><strong>{label}</strong><span>Image placeholder</span></div>;
+}
+const services = [
+  {key:'pumps',title:'Pumps & controls',text:'Pump controller assembly, testing and commissioning. Control panel rewiring for transfer, booster, sewage, non-UL fire and jockey pumps.',items:'Centrifugal, pool, process, sump & sewage pumps'},
+  {key:'automation',title:'Industrial automation',text:'PLC and servo motor installation, upgrades, testing and troubleshooting. Electronic board and inverter repairs.',items:'PLCs, HMIs, servo motors, inverters & sensors'},
+  {key:'treatment',title:'Water treatment',text:'Reverse osmosis, multimedia filtration, pump stations, electrodeionization, ultrafiltration, instrumentation and electrical controls.',items:'SWRO, BWRO, MMF, EDI, UF & UF-MBR'}
+];
+function ProductsPage(){
+ return <><section className="catalog-intro"><div className="container"><a className="breadcrumb" href="/">Home /</a><p className="eyebrow">Products & brands</p><h1>Equipment for your<br/><span>industrial requirements.</span></h1><p className="intro">Explore our range of pumps, controls, instrumentation and automation products. Contact us for model selection, specifications and availability.</p></div></section><section className="section container catalog-section" aria-label="Product categories"><div className="catalog-grid">{catalog.map(item=><article className="catalog-card" key={item.title}><Photo src={item.image} label={item.title}/><div className="catalog-body"><h2>{item.title}</h2><p>{item.products}</p><h3>Brands</h3><ul className="brand-tags">{item.brands.map(brand=><li key={brand}>{brand}</li>)}</ul><a className="text-link" href="#contact">Inquire about this range ↗</a></div></article>)}</div></section></>;
+}
+function App(){
+ const [menu,setMenu]=useState(false);
+ return <><header><div className="container nav"><a className="brand" href="/" aria-label="Flowtech home"><img className="brand-logo" src="/images/flowtech-logo.png" alt="Flowtech Industrial Sales & Services" width="256" height="64"/></a><button className="menu" aria-expanded={menu} aria-controls="navigation" onClick={()=>setMenu(!menu)}>{menu?'Close ✕':'Menu ☰'}</button><nav id="navigation" className={menu?'open':''} aria-label="Main navigation">{['Home','Services','Products & Brands','About','Contact'].map(x=><a key={x} href={x==='Products & Brands'?'/products.html':x==='Home'?'/':`/${'#'}${x.toLowerCase()}`} aria-current={(x==='Products & Brands'&&isProducts)||(x==='Home'&&!isProducts)?'page':undefined} onClick={()=>setMenu(false)}>{x}</a>)}</nav></div></header>
+ <main>{isProducts ? <ProductsPage/> : <><section id="home" className="hero container"><div><p className="eyebrow">Pumps • Automation • Water treatment</p><h1>Reliable products.<br/><span>Dependable service.</span></h1><p className="intro">Industrial equipment and technical support for your pumps, controls and water treatment systems.</p><a className="button" href="#contact">Discuss your requirements <span aria-hidden="true">↗</span></a><p className="hero-note">Established in 2009 · Dasmariñas, Cavite</p></div><div className="hero-photo"><Photo name="hero" label="Your company or project photo"/><div className="photo-caption">Flowtech / Industrial Solutions</div></div></section>
+ <section id="services" className="section container"><p className="eyebrow">Our services</p><h2>Support for every part of your system.</h2><div className="cards">{services.map((s,i)=><article key={s.key}><Photo name={s.key} label={s.title}/><div className="card-body"><span className="number">0{i+1}</span><h3>{s.title}</h3><p>{s.text}</p></div></article>)}</div></section>
+ <section id="products" className="product-section"><div className="container product-layout"><div><p className="eyebrow">Products & components</p><h2>The equipment<br/>your operation needs.</h2><p>Pumps, accessories and control components for industrial applications.</p><a className="text-link" href="/products.html">View products & brands ↗</a></div><ul className="product-list">{['Pumps & electric motors','Flowmeters & float switches','Pressure tanks, switches & gauges','Valves, transmitters & accessories','Pump controllers & electrical components','PLCs, HMIs, inverters & sensors'].map(x=><li key={x}>{x}<span aria-hidden="true">↗</span></li>)}</ul></div></section>
+ <section id="about" className="section container about"><div><p className="eyebrow">About Flowtech</p><h2>Service you can build on.</h2></div><div><p>Established on June 16, 2009, Flowtech Industrial Sales & Services is based in Dasmariñas, Cavite.</p><p>Our mission is to provide excellent service and reliable products at a competitive price—from equipment supply to installation, testing and troubleshooting.</p></div></section>
+ </>}<section id="contact" className="contact"><div className="container contact-layout"><div><p className="eyebrow">Get in touch</p><h2>Let’s talk about<br/>your next project.</h2><p>Contact Flowtech for product inquiries and service requirements.</p></div><address><div><span>Phone</span><p className="contact-placeholder">[Your Phone Number]</p></div><div><span>Email</span><p className="contact-placeholder">[Your Email Address]</p></div><div><span>Visit us</span><p>[Your Business Address]</p></div></address></div></section></main><footer className="container"><span>Flowtech Industrial Sales & Services</span><a href="#">Back to top ↑</a></footer></>;
+}
+createRoot(document.getElementById('root')).render(<App/>);
