@@ -24,3 +24,9 @@ Open `/products.html`. Edit the product categories, brand names, and image paths
 ## Company logo
 
 The shared page header uses `public/images/flowtech-logo.png`, the 256 × 64 PNG preview embedded in your Flowtech.cdr file. For higher-resolution use, replace it with an exported SVG or larger PNG and update the image path if needed.
+
+## GitHub Pages
+
+Deployment URL: https://forgery2214.github.io/flowtech/
+
+In GitHub repository Settings > Pages, select GitHub Actions as the source. The deploy workflow builds and publishes dist on each push to main, or when manually run from Actions. Vite uses /flowtech/ as its base; use the URL printed by npm run dev for local development. Local images and navigation use src/paths.js to preserve this base. Remote image URLs are unchanged.
